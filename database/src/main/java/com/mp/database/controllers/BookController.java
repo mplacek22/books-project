@@ -1,6 +1,5 @@
 package com.mp.database.controllers;
 
-import com.mp.database.domain.dto.AuthorDto;
 import com.mp.database.domain.dto.BookDto;
 import com.mp.database.domain.entities.BookEntity;
 import com.mp.database.mappers.Mapper;
@@ -24,11 +23,17 @@ public class BookController {
     }
 
     @PutMapping(path = "/books/{isbn}")
-    public ResponseEntity<BookDto> createBook(@PathVariable String isbn, @RequestBody BookDto bookDto) {
+    public ResponseEntity<BookDto> createUpdateBook(@PathVariable String isbn, @RequestBody BookDto bookDto) {
         BookEntity bookEntity = bookMapper.mapFrom(bookDto);
-        BookEntity savedBookEntity = bookService.createBook(isbn, bookEntity);
+        boolean bookExists = bookService.isExists(isbn);
+        BookEntity savedBookEntity = bookService.createUpdateBook(isbn, bookEntity);
         BookDto savedUpdatedBookDto = bookMapper.mapTo(savedBookEntity);
-        return new ResponseEntity<>(savedUpdatedBookDto, HttpStatus.CREATED);
+
+        if(bookExists){
+            return new ResponseEntity<>(savedUpdatedBookDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(savedUpdatedBookDto, HttpStatus.CREATED);
+        }
     }
 
     @GetMapping(path = "/books")

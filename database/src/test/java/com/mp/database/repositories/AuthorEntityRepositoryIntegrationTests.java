@@ -2,7 +2,6 @@ package com.mp.database.repositories;
 
 import com.mp.database.TestDataUtil;
 import com.mp.database.domain.entities.AuthorEntity;
-import com.mp.database.repositories.AuthorRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AuthorEntityRepositoryIntegrationTests {
 
-    private AuthorRepository underTest;
+    private final AuthorRepository underTest;
 
     @Autowired
     public AuthorEntityRepositoryIntegrationTests(AuthorRepository underTest) {
