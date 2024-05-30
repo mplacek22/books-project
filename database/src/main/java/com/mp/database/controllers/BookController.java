@@ -33,9 +33,18 @@ public class BookController {
 
     @GetMapping(path = "/books")
     public List<BookDto> listBooks() {
-        var authors = bookService.findAll();
-        return authors.stream()
+        var books = bookService.findAll();
+        return books.stream()
                 .map(bookMapper::mapTo)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping(path = "/books/{isbn}")
+    public ResponseEntity<BookDto> getBook(@PathVariable String isbn) {
+        var book = bookService.findOne(isbn);
+        return book.map(authorEntity -> {
+            var bookDto = bookMapper.mapTo(authorEntity);
+            return new ResponseEntity<>(bookDto, HttpStatus.OK);
+        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
